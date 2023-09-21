@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/pokemon.dart';
 
+// Permet de mapper un type de Pokémon avec une couleur
 Color typeToColor(PokemonType type) {
   Map<PokemonType, Color> typeToColor = {
     PokemonType.normal: Colors.white,
@@ -27,6 +28,7 @@ Color typeToColor(PokemonType type) {
   return typeToColor[type] ?? Colors.transparent;
 }
 
+// Met le nom du type de Pokémon avec une majuscule
 String formatedTypeName(PokemonType type) {
   String typeName = type.toString().split('.').last.replaceAll('PokemonType.', '');
   return typeName[0].toUpperCase() + typeName.substring(1);

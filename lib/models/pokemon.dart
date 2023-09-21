@@ -4,6 +4,8 @@ import '../api/pokemon_api.dart';
 import '../utils/pokemon_type.dart';
 import 'package:flutter/material.dart';
 
+// Classe représentant un Pokémon. Elle contient le nom, le numéro et les types du Pokémon.
+// Elle contient aussi des propriétés calculées pour récupérer l'url de l'image du Pokémon, l'url de l'image shiny du Pokémon et l'url du cri du Pokémon.
 class Pokemon {
   String name;
   int id;
@@ -26,9 +28,11 @@ class Pokemon {
     required this.name,
     required this.id,
     required this.type1,
-    this.type2,
+    this.type2, // Le type 2 n'est pas toujours présent
   });
 
+  // Constructeur qui permet de créer un Pokémon à partir d'un fichier JSON récupéré depuis l'API.
+  // Sera aussi utilisé pour la récupération depuis la base de données
   factory Pokemon.fromJson(Map<String, dynamic> json) {
     return Pokemon(
       name: json['name'],
@@ -39,6 +43,7 @@ class Pokemon {
     );
   }
 
+  // Méthode qui permet de convertir un Pokémon en fichier JSON. Sera aussi utilisé pour l'insertion dans la base de données
   Map<String, dynamic> toJson() {
     return {
       'name': name,
@@ -48,15 +53,19 @@ class Pokemon {
     };
   }
 
+  // Méthode qui permet de récupérer un Pokémon à partir de son ID
+  // Si le Pokémon n'est pas présent dans la base de données, on le récupère depuis l'API
   static Future<Pokemon?> fromID(int id) async {
     Pokemon? pokemon;
     if (!kIsWeb) {
+      // La base de données n'est pas disponible sur le web
       pokemon = await PokedexDatabase.getPokemon(id);
     }
     if (pokemon == null) {
       try {
         pokemon = await PokemonApi.getPokemon(id);
         if (!kIsWeb) {
+          // On insère le Pokémon dans la base de données
           await PokedexDatabase.insertPokemon(pokemon);
         }
       } catch (e) {
@@ -69,6 +78,7 @@ class Pokemon {
 
 }
 
+// Enum qui représente les différents types de Pokémon
 enum PokemonType {
   normal, fighting, flying, poison, ground, rock, bug, ghost, steel, fire, water, grass, electric, psychic, ice, dragon, dark, fairy, unknown, shadow
 }
